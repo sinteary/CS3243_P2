@@ -2,9 +2,12 @@
 
 ## Task 1: Sudoku
 
+Navigate to the folder `CS3243_P2/sudoku`, run the command `python CS3243_P2_Sudoku_47.py input4.txt dump.txt` to test the solver algorithm.
+
+
 **Approach 1:**
-* Maintain assignable numbers for each empty cell on the board as constraints.
-* Use backtracking to try all the assignable numbers for each cell in order.
+* Maintain the list of assignable numbers for each empty cell on the board as constraints.
+* Use backtracking to try all the assignable numbers for each cell in ascending order.
 	* If succeed, proceed to the next empty cell.
 	* If failed, backtrack by resetting the current cell empty and go back to the previous assignment.
 * After each valid assignment, update the constraints for all remaining empty cells on the board
@@ -15,6 +18,20 @@
 * Input3: `2.1306s`
 * Input4: `0.4958s`
 
+
+**Approach 2:**
+* Same as the approach 1, except the assignment of valid candidates is in random order
+
+**Results:**
+
+* Input1: `25.6315s (better case),  213.7323s (worse case)`
+* Input2: `6.1811s  (better cases), 13.1004s  (worse case)`
+* Input3: `1.8654s`
+* Input4: `0.3256s`
+
+> Notes:
+
+> The time taken varies largely. On average, there is no significant improvements from approach 1. For more difficult cases like input1 and input2, this approach struggles to compute the answer occasionally.
 
 
 ## Task 2: The Pacman Game

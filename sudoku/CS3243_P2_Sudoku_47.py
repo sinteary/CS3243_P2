@@ -1,6 +1,7 @@
 import sys
 import copy
 import time
+import random
 
 # Running script: given code can be run with the command:
 # python file.py, ./path/to/init_state.txt ./output/output.txt
@@ -20,7 +21,8 @@ class Sudoku(object):
     def solve(self):
         # Call the the Sudoku solver method
         start = time.time()
-        self.csp_1()
+        # self.csp_1()
+        self.csp_2()
         end = time.time()
 
         print("Time taken to finish: " + str(end - start))
@@ -49,6 +51,59 @@ class Sudoku(object):
                     location = (x, y)
                     # Get a list of valid candidate values for the current empty cell
                     candidates = self.constraints.get(location)
+
+                    for c in candidates:
+                        # Among all valid candidates for the current empty cell, try the value c
+                        self.ans[x][y] = c
+
+                        self.print_table()
+                        # Keep a copy of the old constraints
+                        old_constraints = copy.deepcopy(self.constraints)
+                        # Update the constraints with newly assigned value c
+                        self.constraints = self.get_constraints()
+
+                        # Proceed to the next empty cell by filling the current empty cell with value c
+                        if (self.csp1_helper()):
+                            return True;
+
+                        # The value c is not a valid trial, backtrack by resetting this cell to empty again
+                        # in order to try other values
+                        self.ans[x][y] = 0
+                        # Revert back to the old constraint
+                        self.constraints = old_constraints
+
+                    # We have exhausted the candidates for this cell
+                    # There is no way to solve the puzzle with the current setting
+                    # We need to go back to the previous step
+                    return False;
+        
+        # We have solved the puzzle with every cell filled with valid value
+        return True;
+
+
+    def csp_2(self):
+        # Initialise the constraints on the initial given Sudoku board
+        self.constraints = self.get_constraints();
+        # Call the helper function to solve Sudoku by performing backtracking on the constraints
+        self.csp2_helper()
+        
+
+    def csp2_helper(self):
+        """
+        Perform backtracking to fill each empty cell with value that satisfies the 
+        constraints of Sudoku.
+        """
+        for x in range(len(self.ans)):
+            for y in range(len(self.ans[0])):
+                # When we find an empty cell
+                if (self.ans[x][y] == 0):
+                    # Use the coordinates of the current empty cell to form the key
+                    # The key is used to get the corresponding list of candidate values
+                    location = (x, y)
+                    # Get a list of valid candidate values for the current empty cell
+                    candidates = self.constraints.get(location)
+                    # Try out the candidate in random order
+                    random.shuffle(candidates)
 
                     for c in candidates:
                         # Among all valid candidates for the current empty cell, try the value c
@@ -110,6 +165,7 @@ class Sudoku(object):
                 curr = self.ans[x][y]
                 if (curr in candidate_list):
                     candidate_list.remove(curr)
+
 
         return candidate_list
 
