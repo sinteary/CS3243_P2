@@ -48,6 +48,7 @@ The performance time below includes the printing of debugging table. Actual perf
 * Perform forward checking: stop early when constraints are 
 not satisfiable (some empty cells already have no assignable number)
 
+**Results:**
 * Input1: `11.5302s`
 * Input2: `0.6481s`
 * Input3: `0.3025s`
@@ -65,7 +66,7 @@ by more than half in most cases.
 * Perform forward checking: stop early when constraints are 
 not satisfiable (some empty cells already have no assignable number)
 
-
+**Results:**
 * Input1: `3.9446s`
 * Input2: `0.04649s`
 * Input3: `0.01629s`
