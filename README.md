@@ -79,6 +79,37 @@ not satisfiable (some empty cells already have no assignable number)
 
 ## Task 2: The Pacman Game
 
+### Q-learning
+The update formula for the Q-value from [Wikipedia](https://en.wikipedia.org/wiki/Q-learning)
+
+![formula](reinforcement/img/Q-learning-formula.png)
+
+**Task 1**
+```
+Run "python2 pacman.py -p PacmanQAgent -x 2000 -n 2010 -l smallGrid"
+
+	Completed 2000 out of 2000 training episodes
+	Average Rewards over all training: -50.29
+	Average Rewards for last 100 episodes: 245.66
+	Episode took 1.12 seconds
+
+	Average Score: 500.2
+	Win Rate:      10/10 (1.00)
+
+
+Run "python2 autograder.py -q q1"
+
+	Reinforcement Learning Status:
+		Completed 100 test episodes
+		Average Rewards over testing: 500.48
+		Average Rewards for last 100 episodes: 500.48
+		Episode took 1.15 seconds
+	
+	Average Score: 500.48
+	Win Rate:      100/100 (1.00)
+```
+
+
 ### Basic Elements
 
 `Direction` class: contains the the set of possible directions `{NORTH, SOUTH, EAST, WEST, STOP, LEFT, RIGHT, REVERSE}`
