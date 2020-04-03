@@ -190,15 +190,25 @@ Run "python2 autograder.py -q q1"
 **ApproximateQAgent**
 
 * Attributes:
+
 ```
 featExtractor = util.lookup(extractor, globals())()
+
 weights = util.Counter()
+
 ```
 
-* `getQValue(self, state, action)`: return `Q(state,action) = w * featureVector` where `*` is the dotProduct operator
+* Functions:
 
-* `update(self, state, action, nextState, reward)`: update weights based on transition
+> **getQValue(self, state, action):** 
+```
+- return the Q-value, given the state & action, by applying dot product operation on features and their corresponding weights
+```
 
+> **update(self, state, action, nextState, reward):** 
+```
+- update the weight for each feature based on Q-learning formula
+```
 
 **Task 2**
 
@@ -260,7 +270,7 @@ FeatureExtractor              (featureExtractors.py)
 * `flipCoin(p)`: return true with the given probability `p`
 
 
-**Counter**
+**Counter class**
 
 A counter maintains counts for some keys. It extends from dictionary with number values (integer / float). 
 
