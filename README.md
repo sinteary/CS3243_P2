@@ -4,7 +4,7 @@
 
 Navigate to the folder `CS3243_P2/sudoku`, run the command `python CS3243_P2_Sudoku_47.py input4.txt dump.txt` to test the solver algorithm.
 
-The performance time below includes the printing of debugging table. Actual performance is faster when no debug information is printed on the console.
+:warning:The performance time below includes the printing of debugging table. Actual performance is faster when no debug information is printed on the console.
 
 
 **General algorithm**
@@ -110,32 +110,16 @@ Run "python2 autograder.py -q q1"
 ```
 
 
-### Basic Elements
-
-`Direction` class: contains the the set of possible directions `{NORTH, SOUTH, EAST, WEST, STOP, LEFT, RIGHT, REVERSE}`
-
-`Configuration` class: holds the (x, y) coordinates fo a character and its travelling direction
-
-`AgentState` class: holds the state of an agent (config, speed, scared, ...)
-
-`Actions` class: contains static methods for manipulating move actions
-
-`Game` class: manages agents, rules, history, control flow etc
-
-
 ### Game State
 
 The `GameState` class in `pacman.py` specifies the full game state, including the food, capsules, agent configurations and score changes.
 
 It is used by the `Game` object to capture the actual state of the game and **also used by the agent to reason about the game**.
 
-* `getLegalActions( self, agentIndex=0 )`: returns the legal actions for the specified agent
-
-* `generateSuccessor( self, agentIndex, action)`: return the successor state after the specified agent takes an action
+* `getLegalActions( self, agentIndex=0 )`: returns the legal actions for the specified agent; returns `[]` if no action is possible (i.e. in the terminal state)
 
 
-
-### Inheritance Tree
+### Inheritance Tree (agent)
 ```
 Agent                           (game.py)
 |
@@ -143,81 +127,64 @@ Agent                           (game.py)
   |
    --> ReinforcementAgent       (learningAgents.py)
     |
-     --> QlearningAgent         (qlearningAgents.py)
+     --> QlearningAgent         (qlearningAgents.py)*
       |
        --> PacmanQAgent         (qlearningAgents.py)
         |
-         --> ApproximateQAgent  (qlearningAgents.py)
-```
-
-```
-FeatureExtractor              (featureExtractors.py)
-|
- --> IdentityExtractor
-|
- --> CoordinateExtractor
-|
- --> SimpleExtractor (worth looking at implementation)
-|
- --> NewExtractor (design your own)
+         --> ApproximateQAgent  (qlearningAgents.py)*
 ```
 
 
-**Agent**
-
-* `getAction(self, state)`: receive a game state, return an action from Direction
-
-
-
-**ValueEstimationAgent**
+**QLearningAgent**
 
 * Attributes:
+
 ```
 alpha -------- learning rate
 epsilon ------ exploration rate
 gamma -------- discount factor
 numTraining -- number of training episodes
-```
 
-* `getQValue(self, state, action)`: receive a game state & action, return Q(state, action)
-
-* `getValue(self, state)`: return the value given a game state under the best action. 
-i.e. `V(s) = max_{a in actions} Q(s,a)`
-
-* `getPolicy(self, state)`: return the policy (best action to take given a state). 
-i.e. `policy(s) = arg_max_{a in actions} Q(s,a)`
-
-* `getAction(self, state)`: call `state.getLegalActions()`, choose an action and return it
-
-
-
-**ReinforcementAgent**
-
-* Attributes:
-```
 actionFn = lambda state: state.getLegalActions()
 	(function that takes a state, returns a list of legal actions)
+
 ```
 
-* `update(self, state, action, nextState, reward)`: get called after observing a transition & reward
-
-* `getLegalActions(self,state)`: get available actions for a given state
+* Functions:
 
 
+> **getQValue(self, state, action):**
+```
+- if a state has not seen, return 0.0
+- otherwise return the Q-value of given state & action pair
+```
 
-**QLearningAgent**
+> **computeValueFromQValues(self, state):**
+```
+- return an action that gives the maximum Q-value among all legal actions
+- if no legal action exists, return 0.0
+```
 
-* `getQValue(self, state, action)`: if a state has not seen, return 0.0; otherwise return Q(state, action)
+> **computeActionFromQValues(self, state):** 
+```
+- return the best action (the one that gives the highest Q-value) for a given state 
+- if no legal action exists, return `None`
+```
 
-* `computeValueFromQValues(self, state)`: return `max_action Q(state,action)` over legal actions; if no legal actions, return 0.0
+> **getAction(self, state):**
+```
+- return the action to take given the state 
+- if no legal action exists, return `None`. 
+- the action can be either to explore random choices or follow the policy 
+- the probability to explore is given by `self.epsilon`
+```
 
-* `computeActionFromQValues(self, state)`: compute the best action to take in a given state; if no legal action, return `None`
+> **update(self, state, action, nextState, reward):** 
+```
+- update the Q-value for state & action pair, given the reward for current state and Q-value in nextState 
+- the calculation is based on the Q-learning formula above.
 
-* `getAction(self, state)`: compute the action to take in the current state; if no legal action, return `None`
-
-* `update(self, state, action, nextState, reward)`: called by parent class to observe `state = action => nextState & reward` transition; do the QValue update
-
-
+```
 
 **ApproximateQAgent**
 
@@ -232,15 +199,26 @@ weights = util.Counter()
 * `update(self, state, action, nextState, reward)`: update weights based on transition
 
 
+### Inheritance Tree (extractor)
+
+```
+FeatureExtractor              (featureExtractors.py)
+|
+ --> IdentityExtractor
+|
+ --> CoordinateExtractor
+|
+ --> SimpleExtractor (worth looking at implementation)
+|
+ --> NewExtractor (design your own)*
+```
+
 
 ### Utility
 
 **Functions**
 
-* `manhattanDistance(xy1, xy2)`: return the Manhattan distance between points xy1 and xy2
-
-* `flipCoin(p)`: return true with the given probability
-
+* `flipCoin(p)`: return true with the given probability `p`
 
 
 **Counter**
