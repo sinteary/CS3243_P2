@@ -167,7 +167,7 @@ class QLearningAgent(ReinforcementAgent):
         """
         "*** YOUR CODE HERE ***"
 
-        # record the Q-value at the current given state
+        # the Q-value at the current given state
         oldQvalue = self.getQValue(state, action)
 
         # maximum reward 
@@ -242,14 +242,42 @@ class ApproximateQAgent(PacmanQAgent):
           where * is the dotProduct operator
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        
+        # access all features that extractor considered as relevant
+        # it is a dictionary with (feature, count) pair
+        featureDict = self.featExtractor.getFeatures(state, action)
+
+        # perform dot product operation
+        qvalue = 0.0
+
+        for feat in featureDict.keys():
+          temp = self.weights[feat] * featureDict[feat]
+          qvalue += temp
+
+        return qvalue
+
 
     def update(self, state, action, nextState, reward):
         """
            Should update your weights based on transition
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        
+        featureDict = self.featExtractor.getFeatures(state, action)
+        oldQvalue = self.getQValue(state, action)
+
+        # maximum reward 
+        #   = reward at current state +
+        #     expected max future reward * discount rate
+        futureReward = reward + self.discount * self.getValue(nextState)
+
+        # update the Q value with Q-learning formula
+        tempDiff = futureReward - oldQvalue
+
+        # update weights for each individual feature using Q-learning formula
+        for feat in featureDict.keys():
+          self.weights[feat] += self.alpha * tempDiff * featureDict[feat]
+
 
     def final(self, state):
         "Called at the end of each game."

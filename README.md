@@ -84,31 +84,6 @@ The update formula for the Q-value from [Wikipedia](https://en.wikipedia.org/wik
 
 ![formula](reinforcement/img/Q-learning-formula.png)
 
-**Task 1**
-```
-Run "python2 pacman.py -p PacmanQAgent -x 2000 -n 2010 -l smallGrid"
-
-	Completed 2000 out of 2000 training episodes
-	Average Rewards over all training: -50.29
-	Average Rewards for last 100 episodes: 245.66
-	Episode took 1.12 seconds
-
-	Average Score: 500.2
-	Win Rate:      10/10 (1.00)
-
-
-Run "python2 autograder.py -q q1"
-
-	Reinforcement Learning Status:
-		Completed 100 test episodes
-		Average Rewards over testing: 500.48
-		Average Rewards for last 100 episodes: 500.48
-		Episode took 1.15 seconds
-	
-	Average Score: 500.48
-	Win Rate:      100/100 (1.00)
-```
-
 
 ### Game State
 
@@ -152,7 +127,6 @@ actionFn = lambda state: state.getLegalActions()
 
 * Functions:
 
-
 > **getQValue(self, state, action):**
 ```
 - if a state has not seen, return 0.0
@@ -186,6 +160,33 @@ actionFn = lambda state: state.getLegalActions()
 
 ```
 
+
+**Task 1**
+```
+Run "python2 pacman.py -p PacmanQAgent -x 2000 -n 2010 -l smallGrid"
+
+	Completed 2000 out of 2000 training episodes
+	Average Rewards over all training: -50.29
+	Average Rewards for last 100 episodes: 245.66
+	Episode took 1.12 seconds
+
+	Average Score: 500.2
+	Win Rate:      10/10 (1.00)
+
+
+Run "python2 autograder.py -q q1"
+
+	Reinforcement Learning Status:
+		Completed 100 test episodes
+		Average Rewards over testing: 500.48
+		Average Rewards for last 100 episodes: 500.48
+		Episode took 1.15 seconds
+	
+	Average Score: 500.48
+	Win Rate:      100/100 (1.00)
+```
+
+
 **ApproximateQAgent**
 
 * Attributes:
@@ -197,6 +198,44 @@ weights = util.Counter()
 * `getQValue(self, state, action)`: return `Q(state,action) = w * featureVector` where `*` is the dotProduct operator
 
 * `update(self, state, action, nextState, reward)`: update weights based on transition
+
+
+**Task 2**
+
+```
+Run "python2 pacman.py -p ApproximateQAgent -x 2000 -n 2010 -l smallGrid"
+
+	Reinforcement Learning Status:
+		Completed 2000 out of 2000 training episodes
+		Average Rewards over all training: -77.55
+		Average Rewards for last 100 episodes: 186.18
+		Episode took 1.50 seconds
+
+	Average Score: 499.8
+	Win Rate:      10/10 (1.00)
+
+
+Run "python2 pacman.py -p ApproximateQAgent -a extractor=SimpleExtractor -x 50 -n 60 -l mediumGrid"
+
+	Average Score: 528.2
+	Win Rate:      10/10 (1.00)
+
+
+Run "python2 pacman.py -p ApproximateQAgent -a extractor=SimpleExtractor -x 50 -n 60 -l mediumClassic"
+
+	Average Score: 1323.9
+	Win Rate:      10/10 (1.00)
+
+
+Run "python2 autograder.py -q q2"
+
+	*** PASS: test_cases/q2/1-tinygrid.test
+	*** PASS: test_cases/q2/2-tinygrid-noisy.test
+	*** PASS: test_cases/q2/3-bridge.test
+	*** PASS: test_cases/q2/4-discountgrid.test
+	*** PASS: test_cases/q2/5-coord-extractor.test
+
+```
 
 
 ### Inheritance Tree (extractor)
