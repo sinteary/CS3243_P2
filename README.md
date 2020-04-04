@@ -38,7 +38,6 @@ Navigate to the folder `CS3243_P2/sudoku`, run the command `python CS3243_P2_Sud
 * Input4: `0.7423s`
 
 > Notes:
-
 > The time taken varies largely. On average, there is no significant improvements from approach 1. For more difficult cases like input1 and input2, this approach struggles to compute the answer occasionally.
 
 
@@ -55,7 +54,6 @@ not satisfiable (some empty cells already have no assignable number)
 * Input4: `0.2247s`
 
 > Notes:
-
 > The addition of forward checking has improved performance
 by more than half in most cases.
 
@@ -73,7 +71,6 @@ not satisfiable (some empty cells already have no assignable number)
 * Input4: `0.02353s`
 
 > Notes:
-
 > The heuristic of "sorting by degree of constraints" has further improved the performance. It is because we further narrowed down the number of possibilities to try the assignment.
 
 
@@ -253,14 +250,58 @@ Run "python2 autograder.py -q q2"
 ```
 FeatureExtractor              (featureExtractors.py)
 |
- --> IdentityExtractor
+ --> IdentityExtractor (assign single feature to all state & action pairs)
 |
- --> CoordinateExtractor
+ --> CoordinateExtractor (additionally consider x-y coordinates of the player agent)
 |
- --> SimpleExtractor (worth looking at implementation)
+ --> SimpleExtractor (consider factors of ghosts present 1 step away & nearest food)
 |
- --> NewExtractor (design your own)*
+ --> NewExtractor (additionally consider factors of nearest capsule & nearest scared ghost)
 ```
+
+**Task 3**
+
+```
+Run "python2 pacman.py -p ApproximateQAgent -a extractor=NewExtractor -x 50 -n 60 -l mediumClassic" 
+
+	Average Score: 1583.5
+	Win Rate:      9/10 (0.90)
+
+	Average Score: 1424.6
+	Win Rate:      8/10 (0.80)
+
+	Average Score: 1615.3
+	Win Rate:      10/10 (1.00)
+
+
+Run "python2 pacman.py -p ApproximateQAgent -a extractor=NewExtractor -x 50 -n 60 -l mediumClassic" 
+(prioritise less on hunting capsule)
+
+	Average Score: 1611.2
+	Win Rate:      10/10 (1.00)
+
+	Average Score: 1695.6
+	Win Rate:      10/10 (1.00)
+
+	Average Score: 1588.1
+	Win Rate:      9/10 (0.90)
+
+
+Run "python2 pacman.py -p ApproximateQAgent -a extractor=NewExtractor -x 50 -n 60 -l mediumClassic" 
+(prioritise less on hunting capsule, and more on eating scared ghosts)
+
+	Average Score: 1554.2
+	Win Rate:      9/10 (0.90)
+
+	Average Score: 1636.2
+	Win Rate:      10/10 (1.00)
+
+	Average Score: 1651.0
+	Win Rate:      10/10 (1.00)
+```
+
+> Note:
+> Consider the eating of capsules and scared ghosts definitely maximise the reward as compared with SimpleExtractor by roughly 300 points. Moreover, winning rate is more stable when eating capsule is less prioritised.
 
 
 ### Utility
